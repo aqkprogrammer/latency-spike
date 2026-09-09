@@ -11,9 +11,15 @@ heard a real queue rather than read about one.
 Everything in `spike/endpoint.py` follows from that asymmetry, and two
 behaviours encode it directly. Neither is a tuning parameter:
 
-- **`dangling_veto`** — a clause ending on a preposition, conjunction or
-  postposition vetoes the endpoint regardless of how long the silence runs.
-- **`uncertain_action: stop`** — when the signals disagree, wait.
+- **The dangling veto.** `SemanticGate.classify` returns `Semantic.VETO` for a
+  clause ending on a preposition, conjunction, postposition or filler, and
+  `FusedEndpointer.threshold_ms` turns that into `MAX_HOLD_MS` — the endpoint
+  waits regardless of how long the silence runs.
+- **Waiting when uncertain.** `MAX_HOLD_MS` is a ceiling that hands over, not a
+  timeout that fires an answer, and `SemanticGate` returns `VETO` rather than
+  `NEUTRAL` for anything it cannot read.
+
+Neither is behind a flag, deliberately. A flag invites being turned off.
 
 A pull request that makes the endpointer faster by weakening either of those is
 not an optimisation, it is a regression that the latency numbers will flatter.
