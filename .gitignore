@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+results.json
+room-runs.jsonl
+audio/*.wav
+.venv/
+.DS_Store

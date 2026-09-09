@@ -1,0 +1,10 @@
+# Phase 1 — the offline bench. This is all you need for a real number today.
+aiohttp>=3.9
+
+# Phase 1, optional: neural VAD baseline (--vad silero). Heavy; skip with --vad mock.
+# silero-vad>=5.1
+# torch>=2.2
+# numpy>=1.26
+
+# Phase 2 — the LiveKit room agent. Install when the bench numbers look sane.
+# livekit-agents[deepgram,elevenlabs,openai,silero]>=1.0
