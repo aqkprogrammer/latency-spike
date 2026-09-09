@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      # No dependencies. Everything gated here runs on the standard library —
+      # aiohttp is only needed for the live providers, which CI never calls.
+      - name: Endpointer tests
+        run: python -m spike.test_endpoint
+
+      # Exits non-zero on a single false cut across the case set. This is the
+      # gate that matters: cutting a caller off is the failure that ends pilots,
+      # and it must never reach main.
+      - name: No false cuts
+        run: python -m spike.endpoint_eval
+
+      # Smoke only. Exit 1 means over the 850 ms budget, which is a finding
+      # rather than a build failure; anything higher means the harness broke.
+      - name: Harness smoke
+        run: |
+          set +e
+          python -m spike.bench --mock --endpointer fused -n 3
+          code=$?
+          set -e
+          if [ "$code" -gt 1 ]; then exit "$code"; fi
+          echo "bench exit $code (1 = over budget, not a CI failure)"
+
+      # Exercises the real-recording path against a generated WAV plus word
+      # timings, so the sidecar loader and the pause report stay working.
+      # Without --words the endpointer runs degraded and cuts, which is correct
+      # behaviour and would fail this gate — that is the point of passing them.
+      - name: Clip evaluator, full signal path
+        run: |
+          python - <<'PYGEN'
+          import json
+          from spike import cases, audio
+          c = cases.by_name("dangling")
+          audio.write_wav("/tmp/ci.wav", c.pcm())
+          words, prev = [], []
+          for at, text in c.partials:
+              toks = text.split()
+              words += [{"w": w, "t": at} for w in toks[len(prev):]]
+              prev = toks
+          json.dump(words, open("/tmp/ci.words.json", "w"))
+          PYGEN
+          python -m spike.endpoint_eval --wav /tmp/ci.wav --words /tmp/ci.words.json

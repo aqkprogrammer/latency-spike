@@ -1,5 +1,10 @@
 # Latency spike
 
+[![CI](https://github.com/aqkprogrammer/latency-spike/actions/workflows/ci.yml/badge.svg)](https://github.com/aqkprogrammer/latency-spike/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-Apache_2.0-0b6b53.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11+-0b6b53.svg)](https://www.python.org/)
+
+
 Measures one number: **end of the caller's speech → first byte of audio out**,
 broken down by hop, against the 850 ms budget.
 
@@ -200,3 +205,23 @@ spike/summarise_room.py   Waterfall from room-runs.jsonl
 2. **The LiveKit event names** in `spike/room_agent.py`. That API has moved more
    than once; the handlers degrade to an incomplete run rather than crashing,
    and the report names whichever mark went missing.
+
+## Continuous integration
+
+Three gates run on every push, on Python 3.11, 3.12 and 3.13, with no
+dependencies — everything gated here is standard library.
+
+| Gate | Fails when |
+|---|---|
+| `spike.test_endpoint` | A lexicon case regresses, or the no-false-cut check trips |
+| `spike.endpoint_eval` | Any case in the set gets cut off. Non-negotiable. |
+| `spike.endpoint_eval --wav` | The real-recording path or the sidecar loader breaks |
+
+The bench runs as a smoke check only. Exit 1 there means over the 850 ms
+budget, which is a finding to act on rather than a build to block — anything
+higher means the harness itself broke.
+
+## Licence
+
+Apache 2.0. See [LICENSE](LICENSE). Chosen over MIT for the explicit patent
+grant, which protects both users and the author.
