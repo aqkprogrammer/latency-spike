@@ -60,3 +60,13 @@ jobs:
           json.dump(words, open("/tmp/ci.words.json", "w"))
           PYGEN
           python -m spike.endpoint_eval --wav /tmp/ci.wav --words /tmp/ci.words.json
+
+      - name: Dashboard payload builds
+        run: |
+          python - <<'PYUI'
+          from spike.ui import case_payload
+          d = case_payload()
+          assert len(d["cases"]) == 6, d
+          assert d["summary"]["fused_cuts"] == 0, d["summary"]
+          print("dashboard payload ok:", d["summary"])
+          PYUI

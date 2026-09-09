@@ -126,6 +126,21 @@ waits forever on completed Hindi and cuts off unfinished Hindi, which is why
 the case set. The matrix-language sniff counts Hindi *function* words only —
 "order" and "delivery" are loanwords, not a language switch.
 
+## The dashboard
+
+```bash
+python3 -m spike.ui
+```
+
+Standard library only — no server framework, binds to localhost. Renders every
+case as a timeline: caller speech, where they actually finished, and where each
+endpointer fired. Change a lexicon entry in `spike/endpoint.py`, hit **Run case
+set**, and see which of the six utterances moved and whether anything now gets
+cut off. Click a case for its decision trace.
+
+The lower panel runs the same view against a real recording, with mid-utterance
+pauses outlined — those are the only places a cut can happen.
+
 ## The two phases
 
 **Phase 1 — `spike/bench.py`.** Offline. Feeds a WAV through VAD → STT → LLM →

@@ -1,0 +1,47 @@
+name: Language support
+description: Add a language, or fix an existing lexicon
+labels: ["language"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read the language section of [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md)
+        first — particularly why a new language needs its own dangler set rather
+        than being merged into an existing one.
+  - type: input
+    id: language
+    attributes:
+      label: Language
+      placeholder: Tamil
+    validations: { required: true }
+  - type: dropdown
+    id: order
+    attributes:
+      label: Word order
+      description: This decides whether a trailing auxiliary dangles or ends the clause.
+      options: ["Verb-final (SOV) — like Hindi", "Verb-medial (SVO) — like English", "Other / not sure"]
+    validations: { required: true }
+  - type: textarea
+    id: danglers
+    attributes:
+      label: Words that cannot end a clause
+      description: Prepositions or postpositions, conjunctions, determiners. Romanised is fine.
+    validations: { required: true }
+  - type: textarea
+    id: enders
+    attributes:
+      label: Words that commonly DO end a clause
+      description: The trap. In Hindi "hai" ends sentences; an English-tuned lexicon treats it as dangling.
+    validations: { required: true }
+  - type: textarea
+    id: accelerators
+    attributes:
+      label: Short affirmatives and negatives
+      placeholder: aama, illai
+  - type: checkboxes
+    id: audio
+    attributes:
+      label: Audio
+      options:
+        - label: I can supply recordings in this language
+        - label: I am a native or fluent speaker and can review the lexicon

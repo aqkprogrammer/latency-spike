@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: How to contribute
+    url: https://github.com/aqkprogrammer/latency-spike/blob/main/CONTRIBUTING.md
+    about: Adding a language, adding a failure case, and the measurement rules

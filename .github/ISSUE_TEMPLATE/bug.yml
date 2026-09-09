@@ -1,0 +1,27 @@
+name: Bug
+description: Something in the harness, providers or reporting is wrong
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+    validations: { required: true }
+  - type: textarea
+    id: repro
+    attributes:
+      label: Command that reproduces it
+      render: shell
+      placeholder: python3 -m spike.bench --mock -n 5
+    validations: { required: true }
+  - type: textarea
+    id: output
+    attributes:
+      label: Output
+      render: text
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "3.12.4"
+    validations: { required: true }

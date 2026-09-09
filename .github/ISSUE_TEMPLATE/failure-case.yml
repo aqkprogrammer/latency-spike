@@ -1,0 +1,52 @@
+name: Failure case — it cut someone off, or it hung
+description: The endpointer got a real utterance wrong. The most useful issue you can open here.
+labels: ["failure-case"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        These become permanent cases in `spike/cases.py`. A reproduction is worth
+        more than a description, and a recording is worth more than either.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What went wrong
+      options:
+        - Cut the caller off mid-utterance
+        - Never fired — dead air until the ceiling
+        - Fired far too late on a complete utterance
+        - Wrong language, or flipped language mid-call
+    validations: { required: true }
+  - type: textarea
+    id: utterance
+    attributes:
+      label: What the caller said
+      description: Verbatim, including where they paused. Mark the pause with —
+      placeholder: "I want to move it to — (2s pause) — Thursday"
+    validations: { required: true }
+  - type: input
+    id: language
+    attributes:
+      label: Language, or language mix
+      placeholder: Hinglish — Hindi frame, English nouns
+    validations: { required: true }
+  - type: input
+    id: context
+    attributes:
+      label: Context the dialogue layer had declared
+      placeholder: open / yes_no / digits / address / spelling — or unknown
+  - type: textarea
+    id: expected
+    attributes:
+      label: Where should it have fired
+      placeholder: After "Thursday", ~200ms later. It fired in the pause instead.
+    validations: { required: true }
+  - type: checkboxes
+    id: artefacts
+    attributes:
+      label: What you can share
+      options:
+        - label: I have the audio and can share it
+        - label: I have a transcript with word timings
+        - label: I have the decision trace (`--trace`) output
+        - label: Neither, but I can describe it precisely

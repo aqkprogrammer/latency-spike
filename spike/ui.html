@@ -1,0 +1,208 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>latency-spike</title>
+<style>
+:root{
+  --ground:#F4F6F5;--surface:#FFF;--surface-2:#EDF1EF;--surface-3:#E3EAE7;
+  --ink:#111C19;--ink-2:#3B4B46;--muted:#6E807A;--rule:#D8E0DD;--rule-strong:#B9C6C1;
+  --accent:#0B6B53;--accent-soft:#E0EDE7;--good:#0A7A5E;--good-bg:#DDEDE7;
+  --warn:#A87200;--warn-bg:#F7EEDC;--crit:#9E1B1F;--crit-bg:#F7E1E1;--on-accent:#FFF;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ground:#0D1411;--surface:#141D19;--surface-2:#1B2621;--surface-3:#22302A;
+  --ink:#E7EFEB;--ink-2:#B4C3BD;--muted:#849790;--rule:#28352F;--rule-strong:#3C4D46;
+  --accent:#43C9A0;--accent-soft:#16302A;--good:#2FA97F;--good-bg:#17332A;
+  --warn:#BC8A14;--warn-bg:#2E2513;--crit:#D14B5E;--crit-bg:#33191D;--on-accent:#07231C;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font:15px/1.55 "Source Serif 4",Georgia,serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,button,label,th{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
+.mono,code{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+.wrap{max-width:1040px;margin:0 auto;padding:30px clamp(14px,3vw,28px) 80px}
+header{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:22px;
+  display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+h1{margin:0;font-size:1.5rem;letter-spacing:-.02em;font-weight:700}
+.kick{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted)}
+.ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button,select,input{font-family:Archivo,sans-serif;font-size:.78rem;font-weight:600;
+  padding:6px 12px;border:1px solid var(--rule-strong);background:var(--surface);
+  color:var(--ink);cursor:pointer;border-radius:0}
+button.p{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+button:hover{border-color:var(--accent)}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin-bottom:22px}
+.sum>div{background:var(--surface);padding:13px 15px}
+.sum .k{font-family:Archivo,sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted)}
+.sum .v{font-family:"IBM Plex Mono",monospace;font-size:1.5rem;font-weight:600;margin-top:4px;
+  font-variant-numeric:tabular-nums}
+.sum .v.ok{color:var(--good)}.sum .v.bad{color:var(--crit)}
+h2{font-family:Archivo,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);margin:34px 0 12px;padding-bottom:7px;
+  border-bottom:1px solid var(--rule)}
+.case{border:1px solid var(--rule);background:var(--surface);margin-bottom:12px}
+.ch{padding:10px 15px;background:var(--surface-2);border-bottom:1px solid var(--rule);
+  display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;cursor:pointer}
+.ch .n{font-family:Archivo,sans-serif;font-weight:600;font-size:.92rem}
+.ch .cx{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--muted)}
+.ch .res{margin-left:auto;display:flex;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:.76rem}
+.tag{padding:1px 7px;font-family:Archivo,sans-serif;font-size:.64rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase}
+.tag.ok{background:var(--good-bg);color:var(--good)}
+.tag.cut{background:var(--crit-bg);color:var(--crit)}
+.tag.never{background:var(--warn-bg);color:var(--warn)}
+.cb{padding:14px 15px 6px}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.seg{fill:var(--accent)}.gap{fill:var(--surface-3)}
+.lab{fill:var(--muted);font-family:Archivo,sans-serif;font-size:9.5px;font-weight:600}
+.tk{fill:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:9px}
+.grid{stroke:var(--rule);stroke-width:1}
+.truth{stroke:var(--ink);stroke-width:1.5;stroke-dasharray:3 2}
+.mk{stroke-width:2}.mk.fx{stroke:var(--crit)}.mk.fu{stroke:var(--good)}
+.mkl{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600}
+.mkl.fx{fill:var(--crit)}.mkl.fu{fill:var(--good)}
+.det{padding:0 15px 14px;font-size:.85rem;color:var(--ink-2);display:none}
+.case.open .det{display:block}
+.det .note{margin:0 0 10px}
+.det pre{background:var(--surface-2);border:1px solid var(--rule);padding:9px 11px;margin:0 0 10px;
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;line-height:1.6;overflow-x:auto}
+.msg{border:1px dashed var(--rule-strong);padding:24px;text-align:center;color:var(--muted);font-size:.9rem}
+.msg code{background:var(--surface-2);padding:2px 6px}
+.err{border:1px solid var(--crit);background:var(--crit-bg);color:var(--crit);padding:12px 14px;
+  font-size:.88rem;margin-bottom:16px}
+footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);
+  font-size:.8rem;color:var(--muted)}
+</style>
+
+<div class="wrap">
+<header>
+  <div><div class="kick">latency-spike · local</div><h1>Endpointer dashboard</h1></div>
+  <div class="ctl">
+    <label class="kick" for="hang">fixed baseline</label>
+    <select id="hang">
+      <option>300</option><option selected>500</option><option>700</option><option>900</option>
+    </select>
+    <button class="p" id="run">Run case set</button>
+  </div>
+</header>
+
+<div id="err"></div>
+<div id="sum" class="sum" hidden></div>
+<h2>Cases</h2>
+<div id="cases"><div class="msg">Loading…</div></div>
+
+<h2>Real recording</h2>
+<div class="ctl" style="margin-bottom:14px">
+  <select id="wav"><option value="">no .wav in audio/</option></select>
+  <input id="words" placeholder="words json (optional)" style="min-width:220px;font-weight:400">
+  <select id="ctx"><option>open</option><option>yes_no</option><option>selection</option>
+    <option>digits</option><option>address</option><option>spelling</option></select>
+  <button id="runclip">Run clip</button>
+</div>
+<div id="clip"><div class="msg">Drop a 16-bit mono 16&nbsp;kHz file in <code>audio/</code>, then
+  <code>python3 -m spike.transcribe audio/caller.wav</code> and reload.</div></div>
+
+<footer>Served from <code>python3 -m spike.ui</code> on localhost. Case timelines are
+computed live — edit a lexicon in <code>spike/endpoint.py</code>, hit Run, and see which
+utterances moved.</footer>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+function timeline(d, showGaps){
+  const W = 900, H = 96, L = 8, R = 838, T = 26, span = d.total || 1;
+  const x = ms => L + (R - L) * (ms / span);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="timeline">`;
+  for (let t = 0; t <= span; t += 500){
+    s += `<line class="grid" x1="${x(t)}" y1="${T}" x2="${x(t)}" y2="${T+22}"/>`;
+    s += `<text class="tk" x="${x(t)}" y="${T+36}" text-anchor="middle">${t}</text>`;
+  }
+  s += `<rect class="gap" x="${L}" y="${T}" width="${R-L}" height="22"/>`;
+  (d.segments||[]).forEach(([a,b]) =>
+    s += `<rect class="seg" x="${x(a)}" y="${T}" width="${Math.max(1,x(b)-x(a))}" height="22" rx="2"/>`);
+  if (showGaps) (d.gaps||[]).forEach(([a,b]) =>
+    s += `<rect x="${x(a)}" y="${T}" width="${x(b)-x(a)}" height="22" fill="none"
+           stroke="var(--warn)" stroke-width="1" stroke-dasharray="2 2"/>`);
+  s += `<line class="truth" x1="${x(d.true_end)}" y1="${T-8}" x2="${x(d.true_end)}" y2="${T+30}"/>`;
+  s += `<text class="lab" x="${x(d.true_end)+5}" y="${T-11}">caller finished</text>`;
+  const mark = (f, cls, label, y) => {
+    if (!f || f.at == null) return "";
+    const px = x(f.at);
+    return `<line class="mk ${cls}" x1="${px}" y1="${y}" x2="${px}" y2="${y+18}"/>` +
+      `<text class="mkl ${cls}" x="${px+5}" y="${y+13}">${label} ${Math.round(f.at)}${
+        f.latency!=null?` (${f.latency>=0?"+":""}${Math.round(f.latency)})`:""}</text>`;
+  };
+  s += mark(d.fixed, "fx", "fixed", T+44);
+  s += mark(d.fused, "fu", "fused", T+64);
+  return s + "</svg>";
+}
+const tag = f => f.never ? '<span class="tag never">never fired</span>'
+  : f.cut ? '<span class="tag cut">cut</span>'
+  : `<span class="tag ok">+${Math.round(f.latency)}ms</span>`;
+
+async function runCases(){
+  $("#err").innerHTML = "";
+  $("#cases").innerHTML = '<div class="msg">Running…</div>';
+  let d;
+  try { d = await (await fetch("/api/cases?hang_ms=" + $("#hang").value)).json(); }
+  catch(e){ return $("#err").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+  if (d.error) return $("#err").innerHTML = `<div class="err">${esc(d.error)}</div>`;
+
+  const s = d.summary;
+  $("#sum").hidden = false;
+  $("#sum").innerHTML = `
+    <div><div class="k">Fixed ${d.hang_ms}ms · cuts</div><div class="v ${s.fixed_cuts?"bad":"ok"}">${s.fixed_cuts}</div></div>
+    <div><div class="k">Fused · cuts</div><div class="v ${s.fused_cuts?"bad":"ok"}">${s.fused_cuts}</div></div>
+    <div><div class="k">Fixed mean latency</div><div class="v">${s.fixed_mean ?? "—"}<span style="font-size:.8rem">ms</span></div></div>
+    <div><div class="k">Fused mean latency</div><div class="v ok">${s.fused_mean ?? "—"}<span style="font-size:.8rem">ms</span></div></div>`;
+
+  $("#cases").innerHTML = d.cases.map((c,i) => `
+    <div class="case" data-i="${i}">
+      <div class="ch"><span class="n">${esc(c.name)}</span>
+        <span class="cx">${esc(c.context)} · base ${c.base_ms}ms</span>
+        <span class="res">fixed ${tag(c.fixed)} fused ${tag(c.fused)}</span></div>
+      <div class="cb">${timeline(c,false)}</div>
+      <div class="det">
+        <p class="note">${esc(c.note)}</p>
+        <pre>${c.fused_trace.map(esc).join("\n") || "(no trace)"}</pre>
+      </div>
+    </div>`).join("");
+  document.querySelectorAll(".ch").forEach(h =>
+    h.onclick = () => h.parentNode.classList.toggle("open"));
+}
+
+async function loadWavs(){
+  try{
+    const d = await (await fetch("/api/clips")).json();
+    if (d.wavs?.length) $("#wav").innerHTML = d.wavs.map(w=>`<option>${esc(w)}</option>`).join("");
+  }catch(e){}
+}
+async function runClip(){
+  const wav = $("#wav").value;
+  if (!wav) return;
+  $("#clip").innerHTML = '<div class="msg">Running…</div>';
+  const q = new URLSearchParams({wav, context:$("#ctx").value, hang_ms:$("#hang").value});
+  if ($("#words").value) q.set("words", $("#words").value);
+  const d = await (await fetch("/api/clip?" + q)).json();
+  if (d.error) return $("#clip").innerHTML = `<div class="err">${esc(d.error)}</div>`;
+  $("#clip").innerHTML = `
+    <div class="case open">
+      <div class="ch"><span class="n">${esc(d.name)}</span>
+        <span class="cx">${d.has_partials ? d.n_partials+" partials" : "no transcript — fused runs degraded"}</span>
+        <span class="res">fixed ${tag(d.fixed)} fused ${tag(d.fused)}</span></div>
+      <div class="cb">${timeline(d,true)}</div>
+      <div class="det">
+        <p class="note">${d.gaps.length} mid-utterance pause(s) over 250ms, outlined above.
+          A single-run utterance only tests speed, never restraint.</p>
+        <pre>${d.fused_trace.map(esc).join("\n") || "(no trace)"}</pre>
+      </div>
+    </div>`;
+}
+$("#run").onclick = runCases;
+$("#runclip").onclick = runClip;
+loadWavs(); runCases();
+</script>
