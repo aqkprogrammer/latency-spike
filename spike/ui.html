@@ -16,46 +16,92 @@
   --warn:#BC8A14;--warn-bg:#2E2513;--crit:#D14B5E;--crit-bg:#33191D;--on-accent:#07231C;}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);
-  font:15px/1.55 "Source Serif 4",Georgia,serif;-webkit-font-smoothing:antialiased}
+  font:15.5px/1.6 "Source Serif 4",Georgia,serif;-webkit-font-smoothing:antialiased}
 h1,h2,h3,button,label,th{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
 .mono,code{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace}
-.wrap{max-width:1040px;margin:0 auto;padding:30px clamp(14px,3vw,28px) 80px}
-header{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:22px;
-  display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
-h1{margin:0;font-size:1.5rem;letter-spacing:-.02em;font-weight:700}
-.kick{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.14em;
+code{background:var(--surface-2);border:1px solid var(--rule);padding:1px 5px;font-size:.86em}
+a{color:var(--accent)}
+.wrap{max-width:1000px;margin:0 auto;padding:30px clamp(14px,3vw,28px) 80px}
+
+header{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:20px}
+.kick{font-family:"IBM Plex Mono",monospace;font-size:.67rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+h1{margin:12px 0 0;font-size:1.75rem;letter-spacing:-.025em;font-weight:700}
+.lede{margin:12px 0 0;max-width:66ch;color:var(--ink-2)}
+
+.bannerlinks{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 0}
+.bannerlinks a{font-family:Archivo,sans-serif;font-size:.76rem;font-weight:600;
+  text-decoration:none;border:1px solid var(--rule-strong);padding:6px 11px;color:var(--ink)}
+.bannerlinks a:hover{border-color:var(--accent);color:var(--accent)}
+
+.status{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin:22px 0}
+.status>div{background:var(--surface);padding:10px 13px}
+.status .k{font-family:Archivo,sans-serif;font-size:.6rem;font-weight:600;letter-spacing:.1em;
   text-transform:uppercase;color:var(--muted)}
+.status .v{font-family:"IBM Plex Mono",monospace;font-size:.85rem;margin-top:3px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.status .v.live{color:var(--good)}
+.status .v.live::before{content:"● "}
+
+h2{font-family:Archivo,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);margin:38px 0 4px;padding-bottom:7px;
+  border-bottom:1px solid var(--rule)}
+.h2sub{color:var(--muted);font-size:.87rem;margin:0 0 16px;max-width:70ch}
+
+.explain{border:1px solid var(--rule);background:var(--surface);margin-bottom:20px}
+.ex2{display:grid;grid-template-columns:1fr;gap:1px;background:var(--rule)}
+@media(min-width:760px){.ex2{grid-template-columns:1fr 1fr}}
+.ex2>div{background:var(--surface);padding:14px 16px}
+.ex2 h3{margin:0 0 6px;font-size:.95rem}
+.ex2 p{margin:0;font-size:.89rem;color:var(--ink-2);line-height:1.5}
+.ex2 .lbl{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--accent);
+  display:block;margin-bottom:4px}
+
+.legend{background:var(--surface);border:1px solid var(--rule);padding:14px 16px;margin-bottom:20px}
+.legend .row{display:flex;gap:10px;align-items:baseline;font-size:.88rem;margin-bottom:7px}
+.legend .row:last-child{margin-bottom:0}
+.legend .sw{flex:0 0 78px;font-family:"IBM Plex Mono",monospace;font-size:.72rem;
+  display:flex;align-items:center;gap:6px;color:var(--muted)}
+.legend .sw i{display:inline-block;width:22px;height:10px}
+.legend .txt{color:var(--ink-2);line-height:1.45}
+
 .ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 button,select,input{font-family:Archivo,sans-serif;font-size:.78rem;font-weight:600;
   padding:6px 12px;border:1px solid var(--rule-strong);background:var(--surface);
   color:var(--ink);cursor:pointer;border-radius:0}
 button.p{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 button:hover{border-color:var(--accent)}
-.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
-  background:var(--rule);border:1px solid var(--rule);margin-bottom:22px}
+
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin-bottom:8px}
 .sum>div{background:var(--surface);padding:13px 15px}
-.sum .k{font-family:Archivo,sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.1em;
+.sum .k{font-family:Archivo,sans-serif;font-size:.61rem;font-weight:600;letter-spacing:.1em;
   text-transform:uppercase;color:var(--muted)}
 .sum .v{font-family:"IBM Plex Mono",monospace;font-size:1.5rem;font-weight:600;margin-top:4px;
   font-variant-numeric:tabular-nums}
 .sum .v.ok{color:var(--good)}.sum .v.bad{color:var(--crit)}
-h2{font-family:Archivo,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--accent);margin:34px 0 12px;padding-bottom:7px;
-  border-bottom:1px solid var(--rule)}
+.sum .s{font-size:.76rem;color:var(--muted);font-family:Archivo,sans-serif;margin-top:3px;line-height:1.35}
+.verdict{border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);
+  padding:11px 14px;font-size:.9rem;margin-bottom:20px;line-height:1.5}
+.verdict.bad{border-color:var(--crit);background:var(--crit-bg);color:var(--crit)}
+
 .case{border:1px solid var(--rule);background:var(--surface);margin-bottom:12px}
-.ch{padding:10px 15px;background:var(--surface-2);border-bottom:1px solid var(--rule);
-  display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;cursor:pointer}
-.ch .n{font-family:Archivo,sans-serif;font-weight:600;font-size:.92rem}
-.ch .cx{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--muted)}
-.ch .res{margin-left:auto;display:flex;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:.76rem}
+.ch{padding:11px 15px;background:var(--surface-2);border-bottom:1px solid var(--rule);
+  display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.ch .n{font-family:Archivo,sans-serif;font-weight:600;font-size:.95rem}
+.ch .id{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--muted)}
+.ch .res{margin-left:auto;display:flex;gap:8px;align-items:center;
+  font-family:Archivo,sans-serif;font-size:.72rem;color:var(--muted)}
 .tag{padding:1px 7px;font-family:Archivo,sans-serif;font-size:.64rem;font-weight:700;
   letter-spacing:.06em;text-transform:uppercase}
 .tag.ok{background:var(--good-bg);color:var(--good)}
 .tag.cut{background:var(--crit-bg);color:var(--crit)}
 .tag.never{background:var(--warn-bg);color:var(--warn)}
-.cb{padding:14px 15px 6px}
+.note{padding:11px 15px 0;font-size:.89rem;color:var(--ink-2);max-width:74ch}
+.cb{padding:8px 15px 4px}
 svg{display:block;width:100%;height:auto;overflow:visible}
-.seg{fill:var(--accent)}.gap{fill:var(--surface-3)}
+.seg{fill:var(--accent)}.gapbg{fill:var(--surface-3)}
 .lab{fill:var(--muted);font-family:Archivo,sans-serif;font-size:9.5px;font-weight:600}
 .tk{fill:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:9px}
 .grid{stroke:var(--rule);stroke-width:1}
@@ -63,116 +109,199 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 .mk{stroke-width:2}.mk.fx{stroke:var(--crit)}.mk.fu{stroke:var(--good)}
 .mkl{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600}
 .mkl.fx{fill:var(--crit)}.mkl.fu{fill:var(--good)}
-.det{padding:0 15px 14px;font-size:.85rem;color:var(--ink-2);display:none}
+.tracebtn{background:none;border:0;color:var(--muted);font-size:.73rem;padding:4px 15px 12px;
+  cursor:pointer;font-weight:600}
+.tracebtn:hover{color:var(--accent)}
+.det{padding:0 15px 14px;display:none}
 .case.open .det{display:block}
-.det .note{margin:0 0 10px}
-.det pre{background:var(--surface-2);border:1px solid var(--rule);padding:9px 11px;margin:0 0 10px;
-  font-family:"IBM Plex Mono",monospace;font-size:.72rem;line-height:1.6;overflow-x:auto}
-.msg{border:1px dashed var(--rule-strong);padding:24px;text-align:center;color:var(--muted);font-size:.9rem}
-.msg code{background:var(--surface-2);padding:2px 6px}
+.det pre{background:var(--surface-2);border:1px solid var(--rule);padding:9px 11px;margin:0;
+  font-family:"IBM Plex Mono",monospace;font-size:.73rem;line-height:1.6;overflow-x:auto}
+.msg{border:1px dashed var(--rule-strong);padding:22px;color:var(--muted);font-size:.89rem;line-height:1.55}
+.msg code{background:var(--surface-2)}
 .err{border:1px solid var(--crit);background:var(--crit-bg);color:var(--crit);padding:12px 14px;
   font-size:.88rem;margin-bottom:16px}
-footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);
-  font-size:.8rem;color:var(--muted)}
+footer{margin-top:38px;padding-top:16px;border-top:1px solid var(--rule);
+  font-size:.83rem;color:var(--muted);max-width:74ch}
 </style>
 
 <div class="wrap">
 <header>
-  <div><div class="kick">latency-spike · local</div><h1>Endpointer dashboard</h1></div>
-  <div class="ctl">
-    <label class="kick" for="hang">fixed baseline</label>
-    <select id="hang">
-      <option>300</option><option selected>500</option><option>700</option><option>900</option>
-    </select>
-    <button class="p" id="run">Run case set</button>
+  <div class="kick"><span>latency-spike</span><span>local engineering tool</span><span>not a product UI</span></div>
+  <h1>Endpointer dashboard</h1>
+  <p class="lede">This measures <b>one thing</b>: when a caller stops talking, how long before the
+  agent works out they've finished. Get it wrong in one direction and you cut people off mid-sentence.
+  Wrong in the other and every exchange has a second of dead air. This page shows both failures at once,
+  across six test utterances.</p>
+  <div class="bannerlinks">
+    <a href="https://claude.ai/code/artifact/b0969897-f2ec-40ba-bbe1-f12edd672d30" target="_blank">The Field Kit — everything else ↗</a>
+    <a href="https://claude.ai/code/artifact/7d643606-ae5c-483b-9fd0-a7c0d275795e" target="_blank">Email drafts ↗</a>
+    <a href="https://claude.ai/code/artifact/50f40522-e585-48c8-bbb3-940325bfaec9" target="_blank">Turn-taking spec ↗</a>
+    <a href="https://github.com/aqkprogrammer/latency-spike" target="_blank">Repo ↗</a>
   </div>
 </header>
 
+<div class="status" id="status"></div>
+
+<h2>What you're looking at</h2>
+<div class="ex2 explain">
+  <div>
+    <span class="lbl">fixed — the baseline</span>
+    <h3>Wait N milliseconds of silence, then assume they're done</h3>
+    <p>What almost every voice stack ships with, and what we're trying to beat. It has no idea
+    what the caller was saying, so a thinking pause looks identical to the end of a sentence.</p>
+  </div>
+  <div>
+    <span class="lbl">fused — ours</span>
+    <h3>Silence, plus falling pitch, plus whether the sentence is finished</h3>
+    <p>Reads the transcript as it arrives. If the words end on “to” or “aur”, it waits however long
+    that takes. If they end on “haan”, it fires almost immediately.</p>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="row"><span class="sw"><i style="background:var(--accent)"></i>green</span>
+    <span class="txt">The caller is speaking. Gaps between blocks are silences.</span></div>
+  <div class="row"><span class="sw"><i style="border-left:2px dashed var(--ink);height:12px;width:2px"></i>dashed</span>
+    <span class="txt"><b>Ground truth</b> — the last moment there is any speech in the file.
+    Firing left of this line means you cut the caller off.</span></div>
+  <div class="row"><span class="sw"><i style="background:var(--crit)"></i>red mark</span>
+    <span class="txt">Where the fixed timeout decided the caller had finished.</span></div>
+  <div class="row"><span class="sw"><i style="background:var(--good)"></i>green mark</span>
+    <span class="txt">Where the fused endpointer decided. The number in brackets is milliseconds
+    after the caller actually stopped — smaller is better, negative is a cut.</span></div>
+</div>
+
+<h2>Results</h2>
+<p class="h2sub">Computed live in this process every time you press Run — nothing here is cached or
+  pre-baked. Change a lexicon entry in <code>spike/endpoint.py</code>, press Run, watch which
+  utterances move.</p>
+<div class="ctl" style="margin-bottom:16px">
+  <label class="kick" for="hang">fixed baseline</label>
+  <select id="hang"><option>300</option><option selected>500</option><option>700</option><option>900</option></select>
+  <button class="p" id="run">Run case set</button>
+  <span id="running" style="font-family:Archivo,sans-serif;font-size:.76rem;color:var(--muted)"></span>
+</div>
 <div id="err"></div>
 <div id="sum" class="sum" hidden></div>
-<h2>Cases</h2>
+<div id="verdict"></div>
+
+<h2>The six utterances</h2>
+<p class="h2sub">Synthetic audio with exact ground truth, one per situation the endpointer has to
+  survive. Real recordings are better and go in the panel below; these exist so the comparison runs
+  with nothing installed.</p>
 <div id="cases"><div class="msg">Loading…</div></div>
 
-<h2>Real recording</h2>
+<h2>Your own recording</h2>
 <div class="ctl" style="margin-bottom:14px">
-  <select id="wav"><option value="">no .wav in audio/</option></select>
-  <input id="words" placeholder="words json (optional)" style="min-width:220px;font-weight:400">
+  <select id="wav"><option value="">no .wav found in audio/</option></select>
+  <input id="words" placeholder="words json (optional)" style="min-width:210px;font-weight:400">
   <select id="ctx"><option>open</option><option>yes_no</option><option>selection</option>
     <option>digits</option><option>address</option><option>spelling</option></select>
   <button id="runclip">Run clip</button>
 </div>
-<div id="clip"><div class="msg">Drop a 16-bit mono 16&nbsp;kHz file in <code>audio/</code>, then
-  <code>python3 -m spike.transcribe audio/caller.wav</code> and reload.</div></div>
+<div id="clip"><div class="msg"><b>Nothing here yet.</b><br>
+  Put a 16-bit mono 16&nbsp;kHz recording at <code>audio/caller.wav</code> — ideally a real call
+  where someone pauses to think, since a clean studio read only tests speed.<br><br>
+  Then <code>python3 -m spike.transcribe audio/caller.wav</code> and reload this page.
+  Without a transcript the fused endpointer loses its main signal and cuts people off too.</div></div>
 
-<footer>Served from <code>python3 -m spike.ui</code> on localhost. Case timelines are
-computed live — edit a lexicon in <code>spike/endpoint.py</code>, hit Run, and see which
-utterances moved.</footer>
+<footer>Served by <code>python3 -m spike.ui</code> from your machine on localhost — no data leaves it,
+and this page is not part of the product. It exists so that changing a rule and seeing the effect is
+one keystroke rather than a terminal table. Everything commercial — plan, decks, contracts, email
+drafts — lives in The Field Kit, linked at the top.</footer>
 </div>
 
 <script>
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 
+async function status(){
+  try{
+    const d = await (await fetch("/api/status")).json();
+    $("#status").innerHTML = `
+      <div><div class="k">Server</div><div class="v live">running</div></div>
+      <div><div class="k">Address</div><div class="v">localhost:${d.port}</div></div>
+      <div><div class="k">Python</div><div class="v">${esc(d.python)}</div></div>
+      <div><div class="k">Test cases</div><div class="v">${d.cases}</div></div>
+      <div><div class="k">Working dir</div><div class="v" title="${esc(d.cwd)}">${esc(d.cwd.split("/").slice(-2).join("/"))}</div></div>
+      <div><div class="k">Last run</div><div class="v" id="lastrun">—</div></div>`;
+  }catch(e){}
+}
+
 function timeline(d, showGaps){
-  const W = 900, H = 96, L = 8, R = 838, T = 26, span = d.total || 1;
+  const W = 900, H = 100, L = 8, R = 830, T = 28, span = d.total || 1;
   const x = ms => L + (R - L) * (ms / span);
-  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="timeline">`;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="timeline for ${esc(d.title||d.name)}">`;
   for (let t = 0; t <= span; t += 500){
     s += `<line class="grid" x1="${x(t)}" y1="${T}" x2="${x(t)}" y2="${T+22}"/>`;
     s += `<text class="tk" x="${x(t)}" y="${T+36}" text-anchor="middle">${t}</text>`;
   }
-  s += `<rect class="gap" x="${L}" y="${T}" width="${R-L}" height="22"/>`;
+  s += `<text class="tk" x="${R}" y="${T+36}" text-anchor="end">ms</text>`;
+  s += `<rect class="gapbg" x="${L}" y="${T}" width="${R-L}" height="22"/>`;
   (d.segments||[]).forEach(([a,b]) =>
     s += `<rect class="seg" x="${x(a)}" y="${T}" width="${Math.max(1,x(b)-x(a))}" height="22" rx="2"/>`);
   if (showGaps) (d.gaps||[]).forEach(([a,b]) =>
     s += `<rect x="${x(a)}" y="${T}" width="${x(b)-x(a)}" height="22" fill="none"
            stroke="var(--warn)" stroke-width="1" stroke-dasharray="2 2"/>`);
-  s += `<line class="truth" x1="${x(d.true_end)}" y1="${T-8}" x2="${x(d.true_end)}" y2="${T+30}"/>`;
-  s += `<text class="lab" x="${x(d.true_end)+5}" y="${T-11}">caller finished</text>`;
+  s += `<line class="truth" x1="${x(d.true_end)}" y1="${T-9}" x2="${x(d.true_end)}" y2="${T+30}"/>`;
+  s += `<text class="lab" x="${x(d.true_end)+5}" y="${T-12}">caller finished</text>`;
   const mark = (f, cls, label, y) => {
-    if (!f || f.at == null) return "";
+    if (!f || f.at == null) return `<text class="mkl ${cls}" x="${L}" y="${y+13}">${label} never fired</text>`;
     const px = x(f.at);
     return `<line class="mk ${cls}" x1="${px}" y1="${y}" x2="${px}" y2="${y+18}"/>` +
       `<text class="mkl ${cls}" x="${px+5}" y="${y+13}">${label} ${Math.round(f.at)}${
         f.latency!=null?` (${f.latency>=0?"+":""}${Math.round(f.latency)})`:""}</text>`;
   };
-  s += mark(d.fixed, "fx", "fixed", T+44);
-  s += mark(d.fused, "fu", "fused", T+64);
+  s += mark(d.fixed, "fx", "fixed", T+44) + mark(d.fused, "fu", "fused", T+66);
   return s + "</svg>";
 }
 const tag = f => f.never ? '<span class="tag never">never fired</span>'
-  : f.cut ? '<span class="tag cut">cut</span>'
+  : f.cut ? '<span class="tag cut">cut them off</span>'
   : `<span class="tag ok">+${Math.round(f.latency)}ms</span>`;
 
 async function runCases(){
-  $("#err").innerHTML = "";
-  $("#cases").innerHTML = '<div class="msg">Running…</div>';
+  $("#err").innerHTML = ""; $("#running").textContent = "running…";
   let d;
   try { d = await (await fetch("/api/cases?hang_ms=" + $("#hang").value)).json(); }
-  catch(e){ return $("#err").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+  catch(e){ $("#running").textContent=""; return $("#err").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+  $("#running").textContent = "";
   if (d.error) return $("#err").innerHTML = `<div class="err">${esc(d.error)}</div>`;
+  const lr = $("#lastrun"); if (lr) lr.textContent = new Date().toLocaleTimeString();
 
   const s = d.summary;
   $("#sum").hidden = false;
   $("#sum").innerHTML = `
-    <div><div class="k">Fixed ${d.hang_ms}ms · cuts</div><div class="v ${s.fixed_cuts?"bad":"ok"}">${s.fixed_cuts}</div></div>
-    <div><div class="k">Fused · cuts</div><div class="v ${s.fused_cuts?"bad":"ok"}">${s.fused_cuts}</div></div>
-    <div><div class="k">Fixed mean latency</div><div class="v">${s.fixed_mean ?? "—"}<span style="font-size:.8rem">ms</span></div></div>
-    <div><div class="k">Fused mean latency</div><div class="v ok">${s.fused_mean ?? "—"}<span style="font-size:.8rem">ms</span></div></div>`;
+    <div><div class="k">Fixed ${d.hang_ms}ms · cut off</div><div class="v ${s.fixed_cuts?"bad":"ok"}">${s.fixed_cuts}<span style="font-size:.8rem;color:var(--muted)"> of 6</span></div>
+      <div class="s">callers interrupted mid-sentence</div></div>
+    <div><div class="k">Fused · cut off</div><div class="v ${s.fused_cuts?"bad":"ok"}">${s.fused_cuts}<span style="font-size:.8rem;color:var(--muted)"> of 6</span></div>
+      <div class="s">must be zero, always</div></div>
+    <div><div class="k">Fixed · mean wait</div><div class="v">${s.fixed_mean ?? "—"}<span style="font-size:.8rem">ms</span></div>
+      <div class="s">on the ones it didn't ruin</div></div>
+    <div><div class="k">Fused · mean wait</div><div class="v ok">${s.fused_mean ?? "—"}<span style="font-size:.8rem">ms</span></div>
+      <div class="s">lower is snappier</div></div>`;
+
+  const saved = (s.fixed_mean ?? 0) - (s.fused_mean ?? 0);
+  $("#verdict").innerHTML = s.fused_cuts
+    ? `<div class="verdict bad"><b>${s.fused_cuts} case(s) cut off.</b> That blocks a merge — CI fails on
+       any false cut. Open the case below and read its trace.</div>`
+    : `<div class="verdict"><b>Zero cuts, and ${saved > 0 ? saved+"ms faster" : Math.abs(saved)+"ms slower"} on average.</b>
+       Try the baseline at 300ms: the fixed timeout gets nearly as fast as fused, and cuts a third caller off.
+       That's the point — speed was never the hard part.</div>`;
 
   $("#cases").innerHTML = d.cases.map((c,i) => `
     <div class="case" data-i="${i}">
-      <div class="ch"><span class="n">${esc(c.name)}</span>
-        <span class="cx">${esc(c.context)} · base ${c.base_ms}ms</span>
-        <span class="res">fixed ${tag(c.fixed)} fused ${tag(c.fused)}</span></div>
+      <div class="ch"><span class="n">${esc(c.title || c.name)}</span>
+        <span class="id">${esc(c.name)} · expects ${esc(c.context)}</span>
+        <span class="res">fixed ${tag(c.fixed)} &nbsp;fused ${tag(c.fused)}</span></div>
+      <p class="note">${esc(c.note)}</p>
       <div class="cb">${timeline(c,false)}</div>
-      <div class="det">
-        <p class="note">${esc(c.note)}</p>
-        <pre>${c.fused_trace.map(esc).join("\n") || "(no trace)"}</pre>
-      </div>
+      <button class="tracebtn">show decision trace ▾</button>
+      <div class="det"><pre>${c.fused_trace.map(esc).join("\n") || "(no trace)"}</pre></div>
     </div>`).join("");
-  document.querySelectorAll(".ch").forEach(h =>
-    h.onclick = () => h.parentNode.classList.toggle("open"));
+  document.querySelectorAll(".tracebtn").forEach(b => b.onclick = () => {
+    const c = b.parentNode; c.classList.toggle("open");
+    b.textContent = c.classList.contains("open") ? "hide decision trace ▴" : "show decision trace ▾";
+  });
 }
 
 async function loadWavs(){
@@ -192,17 +321,16 @@ async function runClip(){
   $("#clip").innerHTML = `
     <div class="case open">
       <div class="ch"><span class="n">${esc(d.name)}</span>
-        <span class="cx">${d.has_partials ? d.n_partials+" partials" : "no transcript — fused runs degraded"}</span>
-        <span class="res">fixed ${tag(d.fixed)} fused ${tag(d.fused)}</span></div>
+        <span class="id">${d.has_partials ? d.n_partials+" transcript partials" : "no transcript — fused is running degraded"}</span>
+        <span class="res">fixed ${tag(d.fixed)} &nbsp;fused ${tag(d.fused)}</span></div>
+      <p class="note">${d.gaps.length} mid-utterance pause${d.gaps.length===1?"":"s"} over 250ms,
+        outlined in amber. Those are the only places a cut can happen — an utterance with no pauses
+        only tests speed, never restraint.</p>
       <div class="cb">${timeline(d,true)}</div>
-      <div class="det">
-        <p class="note">${d.gaps.length} mid-utterance pause(s) over 250ms, outlined above.
-          A single-run utterance only tests speed, never restraint.</p>
-        <pre>${d.fused_trace.map(esc).join("\n") || "(no trace)"}</pre>
-      </div>
+      <div class="det"><pre>${d.fused_trace.map(esc).join("\n") || "(no trace)"}</pre></div>
     </div>`;
 }
 $("#run").onclick = runCases;
 $("#runclip").onclick = runClip;
-loadWavs(); runCases();
+status(); loadWavs(); runCases();
 </script>

@@ -26,6 +26,17 @@ from .endpoint_eval import FRAME_MS, run as run_case
 
 HERE = Path(__file__).parent
 
+# Plain-English names. The identifiers are for the code; nobody opening the
+# dashboard for the first time knows what "dangling" means.
+TITLES = {
+    "complete": "A finished sentence",
+    "dangling": "A thinking pause mid-sentence",
+    "digits": "A phone number, read in groups",
+    "short_answer": "A one-word answer",
+    "hinglish_dangling": "Hindi, pausing on a postposition",
+    "hinglish_complete": "Hindi, ending on a verb",
+}
+
 
 def case_payload(hang_ms: int = 500) -> dict:
     out = []
@@ -38,6 +49,7 @@ def case_payload(hang_ms: int = 500) -> dict:
         )
         out.append({
             "name": case.name,
+            "title": TITLES.get(case.name, case.name),
             "note": case.note,
             "context": case.context.value,
             "base_ms": BASE_MS[case.context],
@@ -144,6 +156,15 @@ class Handler(BaseHTTPRequestHandler):
                     return
                 self._json(clip_payload(wav, q.get("words") or None, q.get("text") or None,
                                         q.get("context", "open"), int(q.get("hang_ms", 500))))
+            elif u.path == "/api/status":
+                import platform, time
+                self._json({
+                    "python": platform.python_version(),
+                    "cwd": str(Path.cwd()),
+                    "port": self.server.server_address[1],
+                    "cases": len(C.CASES),
+                    "now": time.strftime("%H:%M:%S"),
+                })
             elif u.path == "/api/clips":
                 found = sorted(str(p) for p in Path("audio").glob("*.wav"))
                 self._json({"wavs": found})

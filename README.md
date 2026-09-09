@@ -132,14 +132,23 @@ the case set. The matrix-language sniff counts Hindi *function* words only —
 python3 -m spike.ui
 ```
 
-Standard library only — no server framework, binds to localhost. Renders every
-case as a timeline: caller speech, where they actually finished, and where each
-endpointer fired. Change a lexicon entry in `spike/endpoint.py`, hit **Run case
-set**, and see which of the six utterances moved and whether anything now gets
-cut off. Click a case for its decision trace.
+Standard library only — no server framework, binds to localhost, nothing leaves
+your machine. It opens by explaining what it measures and how to read the
+timelines, because the numbers are meaningless without knowing which direction
+is bad.
 
-The lower panel runs the same view against a real recording, with mid-utterance
-pauses outlined — those are the only places a cut can happen.
+Each of the six test utterances renders as a timeline: caller speech in green, a
+dashed line where they actually stopped, and a marker for each endpointer.
+Firing left of the dashed line means you cut the caller off. Change a lexicon
+entry in `spike/endpoint.py`, hit **Run case set**, and watch which utterances
+move. Every case carries its note and a decision trace.
+
+The lower panel runs the same view against your own recording, with
+mid-utterance pauses outlined — the only places a cut can happen.
+
+**This is an engineering tool, not a product UI, and it holds nothing
+commercial.** Plan, decks, contracts, email drafts and the specifications live
+in the Field Kit, linked from the dashboard header.
 
 ## The two phases
 
