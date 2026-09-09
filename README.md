@@ -221,6 +221,13 @@ The bench runs as a smoke check only. Exit 1 there means over the 850 ms
 budget, which is a finding to act on rather than a build to block — anything
 higher means the harness itself broke.
 
+## Contributing
+
+New languages and new failure cases are the most useful contributions, and both
+are small. See [CONTRIBUTING.md](CONTRIBUTING.md) — particularly the note on why
+each language needs its own dangler lexicon rather than being merged into an
+existing one.
+
 ## Licence
 
 Apache 2.0. See [LICENSE](LICENSE). Chosen over MIT for the explicit patent
